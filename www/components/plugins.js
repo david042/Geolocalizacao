@@ -21,22 +21,28 @@ $(document).on("click","#vibrar",function(){
    navigator.vibrate(3000);
 });
 
-var onSuccess = function(position) {
-        alert('Latitude: '          + position.coords.latitude          + '\n' +
-              'Longitude: '         + position.coords.longitude         + '\n' +
-              'Altitude: '          + position.coords.altitude          + '\n' +
-              'Accuracy: '          + position.coords.accuracy          + '\n' +
-              'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
-              'Heading: '           + position.coords.heading           + '\n' +
-              'Speed: '             + position.coords.speed             + '\n' +
-              'Timestamp: '         + position.timestamp                + '\n');
+function mostraMapa(lat, long){
+  L.mapquest.key = 'vOMG1OZwAUYdsWAkDCYobJ2qatZqUTf1';
+
+        var map = L.mapquest.map('map', {
+          center: [lat, long],
+          layers: L.mapquest.tileLayer('map'),
+          zoom: 13
+        });
+
+        map.addControl(L.mapquest.control());
+}
+
+$(document).on("click","#local",function(){
+   var onSuccess = function(position) {
+        mostraMapa(position.coords.latitude, position.coords.longitude)
+
     };
 
-    // onError Callback receives a PositionError object
-    //
     function onError(error) {
         alert('code: '    + error.code    + '\n' +
               'message: ' + error.message + '\n');
     }
 
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
+});
